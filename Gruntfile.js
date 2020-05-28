@@ -1,4 +1,6 @@
 module.exports = function (grunt) {
+    grunt.loadNpmTasks('grunt-contrib-watch');
+
     require('load-grunt-tasks')(grunt);
 
     var pkg = grunt.file.readJSON('package.json');
@@ -55,7 +57,6 @@ module.exports = function (grunt) {
         replaceFiles.push({src: [distFile], dest: distFile});
         cssMinFiles[distFile] = distFile
     }
-
 
     grunt.initConfig({
         "file-creator": {
@@ -118,7 +119,6 @@ module.exports = function (grunt) {
                     dest: 'node_modules/jenkins-core-theme/images/'
                 }]
             }
-
         },
 
         less: {
@@ -190,13 +190,17 @@ module.exports = function (grunt) {
 
         fileExists: {
             scripts: Object.keys(lessFiles)
-        }
+        },
 
+        watch: {
+            scripts: {
+                files: ['less/*'],
+                tasks: ['default'],
+            },
+        },
     });
 
     // Default task(s).
     grunt.registerTask('default', ['clean', 'file-creator', 'imagemin', 'less', 'replace', 'cssmin', 'postcss']);
     grunt.registerTask('test', ['default', 'fileExists']);
-
-
 };
